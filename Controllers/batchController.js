@@ -595,10 +595,9 @@ export const rejectUserBatch = async (req, res) => {
   }
 };
 
-
 export const createTeam = async (req, res) => {
   try {
-   
+
     if (!req.user || req.user.role !== "hr") {
       return res.status(403).json({ error: "Only HRs can create teams." });
     }
@@ -607,7 +606,7 @@ export const createTeam = async (req, res) => {
     if (!name) return res.status(400).json({ error: "Team name is required." });
     const batch = await Batch.findById(batchId);
     if (!batch) return res.status(404).json({ error: "Batch not found." });
-  
+
     const invalidMembers = members.filter(
       m => !batch.interns.map(i => i.toString()).includes(m)
     );
@@ -627,19 +626,19 @@ export const createTeam = async (req, res) => {
 export const addMembersToTeam = async (req, res) => {
   try {
     const { batchId, teamId } = req.params;
-    const { members } = req.body; 
+    const { members } = req.body;
     const batch = await Batch.findById(batchId);
     if (!batch) return res.status(404).json({ error: "Batch not found." });
     const team = batch.teams.id(teamId);
     if (!team) return res.status(404).json({ error: "Team not found." });
-    
+
     const invalidMembers = members.filter(
       m => !batch.interns.map(i => i.toString()).includes(m)
     );
     if (invalidMembers.length > 0) {
       return res.status(400).json({ error: "Some members are not part of this batch.", invalidMembers });
     }
-    
+
     members.forEach(m => {
       if (!team.members.map(mem => mem.toString()).includes(m)) {
         team.members.push(m);
@@ -679,9 +678,9 @@ export const moveMemberBetweenTeams = async (req, res) => {
     const fromTeam = batch.teams.id(fromTeamId);
     const toTeam = batch.teams.id(toTeamId);
     if (!fromTeam || !toTeam) return res.status(404).json({ error: "One or both teams not found." });
-  
+
     fromTeam.members = fromTeam.members.filter(m => m.toString() !== memberId);
-  
+
     if (!toTeam.members.map(m => m.toString()).includes(memberId)) {
       toTeam.members.push(memberId);
     }
