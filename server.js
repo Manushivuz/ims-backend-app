@@ -84,7 +84,7 @@ io.on("connection", (socket) => {
 app.use("/uploads", express.static("projectimageuploads"));
 
 const corsOptions = {
-  origin: ["https://www.scaleindia.org.in", "http://localhost:5173"," https://ims-frontend-app.vercel.app"
+  origin: ["https://www.scaleindia.org.in", "http://localhost:5173","https://ims-frontend-app.vercel.app"
     ],
   credentials: true,
   methods: "GET, POST, DELETE, PATCH, HEAD, PUT, OPTIONS",
