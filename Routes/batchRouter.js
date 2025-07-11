@@ -14,7 +14,8 @@ import {
   removeMemberFromTeam,
   moveMemberBetweenTeams,
   updateTeam,
-  deleteTeam
+  deleteTeam,
+  getTeamsForBatch
 } from "../Controllers/batchController.js";
 import { ensureAuthenticated } from "../Middlewares/Auth.js";
 
@@ -37,6 +38,7 @@ batchRouter.delete("/:batchId/teams/:teamId/members/:memberId", ensureAuthentica
 batchRouter.post("/:batchId/teams/move-member", ensureAuthenticated, moveMemberBetweenTeams);
 batchRouter.patch("/:batchId/teams/:teamId", ensureAuthenticated, updateTeam);
 batchRouter.delete("/:batchId/teams/:teamId", ensureAuthenticated, deleteTeam);
+batchRouter.get("/:batchId/teams", ensureAuthenticated, getTeamsForBatch);
 
 
 export default batchRouter;

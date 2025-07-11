@@ -597,8 +597,8 @@ export const rejectUserBatch = async (req, res) => {
 
 export const createTeam = async (req, res) => {
   try {
-
-    if (!req.user || req.user.role !== "hr") {
+    const allowedRoles = ["hr", "hrHead"];
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
       return res.status(403).json({ error: "Only HRs can create teams." });
     }
     const { batchId } = req.params;
@@ -722,5 +722,15 @@ export const deleteTeam = async (req, res) => {
   } catch (error) {
     console.error("Error deleting team:", error);
     return res.status(500).json({ error: "Internal Server Error", details: error.message });
+  }
+};
+export const getTeamsForBatch = async (req, res) => {
+  try {
+    const { batchId } = req.params;
+    const batch = await Batch.findById(batchId);
+    if (!batch) return res.status(404).json({ error: "Batch not found" });
+    res.json({ teams: batch.teams });
+  } catch (err) {
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
